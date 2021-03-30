@@ -6,7 +6,7 @@ from com.anton.tools.tools import create_and_assign_role
 g_client = commands.Bot(command_prefix=">")
 
 # Make sure to change this to YOUR bot token!!!
-g_TOKEN = "ODI2MjgwNjQ3NjgxMTE0MTQy.YGKL0Q.qKgFd8SOAPIdaKrqsB_kOECt3Yw"
+g_TOKEN = ""
 
 # Here we are going to load our cogs
 initial_extensions = [
