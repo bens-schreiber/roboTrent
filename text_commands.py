@@ -54,6 +54,6 @@ class TextCommand(commands.Cog):
     async def test(self, t_ctx: discord.ext.commands.Context):
         await t_ctx.send(t_ctx.author.id)
 
-
+        
 def setup(bot):
     bot.add_cog(TextCommand(bot))
