@@ -41,7 +41,7 @@ async def on_message(t_msg: discord.Message):
 
 @g_client.event
 async def on_member_join(t_member: discord.Member):
-    await create_and_assign_role("FFFFFF", t_member)
+    await create_and_assign_role(0xFFFFFF, t_member)
 
 
 g_client.run(g_TOKEN)

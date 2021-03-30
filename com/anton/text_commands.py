@@ -15,25 +15,25 @@ class TextCommand(commands.Cog):
     @commands.command(name="colorme")
     async def color_member_role(self, t_ctx: discord.ext.commands.Context, t_color):
 
-        # 6 is max hex color size
-        if len(t_color) < 7:
+        try:
+
+            hex_color = int(t_color, 16)  # Convert color input to a hex num. Could throw ValueError
 
             # Iterate through roles to find color role.
             has_role = False
-            for role in t_ctx.author.roles[1:]:  # Skip first role in role list, its always @everyone
+            for role in t_ctx.author.roles[1:]:  # Skip first role in role list w/ slicing, its always @everyone
                 if role.name == "color":
                     has_role = True
-                    await role.edit(color=discord.Color(int(t_color, 16)))
+                    await role.edit(color=discord.Color(hex_color))
+                    break
 
             # If the user does not have a color role already defined, make one
             if not has_role:
                 # See implementation in tools
-                await create_and_assign_role(t_color, t_ctx.author)
+                await create_and_assign_role(hex_color, t_ctx.author)
 
-        # If the color is over 6 it isn't hex, send a dumb response
-        else:
-
-            await t_ctx.send("Incomprehensible. ")
+        except ValueError:
+            await t_ctx.send("thats not hex you fucking numbnut")
 
 
 def setup(bot):
