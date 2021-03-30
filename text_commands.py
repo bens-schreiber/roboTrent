@@ -2,6 +2,10 @@ import discord
 from discord.ext import commands
 
 
+######################
+# TEXT COMMANDS ONLY #
+######################
+
 class TextCommand(commands.Cog):
     def __init__(self, m_bot):
         self.m_bot = m_bot
