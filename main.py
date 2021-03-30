@@ -1,12 +1,11 @@
 import discord
 from discord.ext import commands
-import text_commands
 
 # Change this to YOUR prefix!!
 g_client = commands.Bot(command_prefix=">")
 
 # Make sure to change this to YOUR bot token!!!
-g_token = "ODI2MjgwNjQ3NjgxMTE0MTQy.YGKL0Q.F2nhLzEDOevY6PdKXYHfwg32k4w"
+g_token = "ODI2MjgwNjQ3NjgxMTE0MTQy.YGKL0Q.qKgFd8SOAPIdaKrqsB_kOECt3Yw"
 
 # Here we are going to load our cogs
 initial_extensions = [
