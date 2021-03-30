@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from com.anton.tools.tools import create_color_role
 
 
 ######################
@@ -34,17 +35,8 @@ class TextCommand(commands.Cog):
             # If the user does not already have a colored role, create one
             else:
 
-                # Create a new role with the updated color
-                await t_ctx.guild.create_role(
-                    name=usr_id,
-                    color=discord.Color(int(t_color, 16))
-                )
-
-                # Add that role to the user
-                await t_ctx.message.author.add_roles(discord.utils.get(
-                    t_ctx.guild.roles,
-                    name=usr_id)
-                )
+                # See implementation in main
+                await create_color_role(t_color, t_ctx.author)
 
         else:
 
@@ -54,6 +46,6 @@ class TextCommand(commands.Cog):
     async def test(self, t_ctx: discord.ext.commands.Context):
         await t_ctx.send(t_ctx.author.id)
 
-        
+
 def setup(bot):
     bot.add_cog(TextCommand(bot))

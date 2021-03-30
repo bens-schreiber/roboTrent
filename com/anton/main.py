@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
+from com.anton.tools.tools import create_color_role
 
 # Change this to YOUR prefix!!
 g_client = commands.Bot(command_prefix=">")
 
 # Make sure to change this to YOUR bot token!!!
-g_token = "ODI2MjgwNjQ3NjgxMTE0MTQy.YGKL0Q.qKgFd8SOAPIdaKrqsB_kOECt3Yw"
+g_TOKEN = "ODI2MjgwNjQ3NjgxMTE0MTQy.YGKL0Q.qKgFd8SOAPIdaKrqsB_kOECt3Yw"
 
 # Here we are going to load our cogs
 initial_extensions = [
@@ -38,4 +39,9 @@ async def on_message(t_msg: discord.Message):
     await g_client.process_commands(t_msg)
 
 
-g_client.run(g_token)
+@g_client.event
+async def on_member_join(t_member: discord.Member):
+    await create_color_role("FFFFFF", t_member)
+
+
+g_client.run(g_TOKEN)
