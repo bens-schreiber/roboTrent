@@ -3,7 +3,7 @@ import discord
 
 # File for helper functions that can be used throughout the program
 
-async def create_color_role(t_color, t_member: discord.Member):
+async def create_and_assign_role(t_color, t_member: discord.Member):
     # The users decimal based ID
     usr_id = str(t_member.id)
 
@@ -21,3 +21,4 @@ async def create_color_role(t_color, t_member: discord.Member):
         usr_guild.roles,
         name=usr_id)
     )
+

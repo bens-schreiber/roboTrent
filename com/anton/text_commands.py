@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from com.anton.tools.tools import create_color_role
+from com.anton.tools.tools import create_and_assign_role
 
 
 ######################
@@ -35,8 +35,8 @@ class TextCommand(commands.Cog):
             # If the user does not already have a colored role, create one
             else:
 
-                # See implementation in main
-                await create_color_role(t_color, t_ctx.author)
+                # See implementation in tools
+                await create_and_assign_role(t_color, t_ctx.author)
 
         else:
 

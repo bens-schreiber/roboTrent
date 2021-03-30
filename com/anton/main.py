@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from com.anton.tools.tools import create_color_role
+from com.anton.tools.tools import create_and_assign_role
 
 # Change this to YOUR prefix!!
 g_client = commands.Bot(command_prefix=">")
@@ -41,7 +41,7 @@ async def on_message(t_msg: discord.Message):
 
 @g_client.event
 async def on_member_join(t_member: discord.Member):
-    await create_color_role("FFFFFF", t_member)
+    await create_and_assign_role("FFFFFF", t_member)
 
 
 g_client.run(g_TOKEN)
