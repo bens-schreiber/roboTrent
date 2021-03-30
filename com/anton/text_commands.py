@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from com.anton.tools.tools import create_and_assign_role
+from com.anton.tools.tools import *
 
 
 ######################
@@ -32,8 +32,21 @@ class TextCommand(commands.Cog):
                 # See implementation in tools
                 await create_and_assign_role(hex_color, t_ctx.author)
 
+            await t_ctx.send(embed=SuccessEmbed(t_title=f"Color changed to {t_color}").embed())
+
         except ValueError:
-            await t_ctx.send("thats not hex you fucking numbnut")
+            await t_ctx.send(embed=ErrorEmbed(t_description="Must be a hex value.").embed())
+
+    @commands.command(name="avatar")
+    async def send_avatar(self, t_ctx: discord.ext.commands.Context, t_member: discord.Member = None):
+
+        if t_member:
+
+            await t_ctx.send(t_member.avatar_url)
+
+        else:
+
+            await t_ctx.send(t_ctx.author.avatar_url)
 
 
 def setup(bot):

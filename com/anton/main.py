@@ -1,6 +1,9 @@
+import sys
+import traceback
+
 import discord
 from discord.ext import commands
-from com.anton.tools.tools import create_and_assign_role
+from com.anton.tools.tools import *
 
 # Change this to YOUR prefix!!
 g_client = commands.Bot(command_prefix=">")
@@ -34,7 +37,7 @@ async def on_ready():
 async def on_message(t_msg: discord.Message):
     ctx = t_msg.channel
     if "sus" in t_msg.content:
-        await ctx.send(t_msg.content)
+        await ctx.send("you said it!")
 
     await g_client.process_commands(t_msg)
 
@@ -42,6 +45,22 @@ async def on_message(t_msg: discord.Message):
 @g_client.event
 async def on_member_join(t_member: discord.Member):
     await create_and_assign_role(0xFFFFFF, t_member)
+
+
+# Handle any errors
+@g_client.event
+async def on_command_error(t_ctx: discord.ext.commands.Context, t_error: discord.ext.commands.CommandError):
+    if hasattr(t_ctx.command, 'on_error'):
+        return
+
+    # Anything in ignored will return and prevent anything happening.
+    if isinstance(t_error, commands.CommandNotFound):
+        await t_ctx.send(embed=ErrorEmbed(t_description="Command not found").embed())
+
+    else:
+        # All other Errors not returned come here. And we can just print the default TraceBack.
+        print('Ignoring exception in command {}:'.format(t_ctx.command), file=sys.stderr)
+        traceback.print_exception(type(t_error), t_error, t_error.__traceback__, file=sys.stderr)
 
 
 g_client.run(g_TOKEN)
