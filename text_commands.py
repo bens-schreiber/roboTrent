@@ -14,6 +14,6 @@ class TextCommand(commands.Cog):
     async def respond_with_hi(self, t_ctx: discord.ext.commands.Context):
         await t_ctx.send("hi!")
 
-
+#dasdasd
 def setup(bot):
     bot.add_cog(TextCommand(bot))
