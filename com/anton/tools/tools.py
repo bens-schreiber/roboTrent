@@ -4,6 +4,11 @@ from discord.ext import commands
 
 # File for helper functions that can be used throughout the program
 
+# The category that temp channels are hardcoded into. Change it here.
+def temp_category():
+    return 826653009005772800
+
+
 async def create_and_assign_role(t_hex: int, t_member: discord.Member):
     """
     :param t_hex: integer hex color code
@@ -33,9 +38,8 @@ async def send_error_embed(t_ctx: discord.ext.commands.Context,
 
 
 async def send_success_embed(t_ctx: discord.ext.commands.Context,
-                             t_title="Success",
+                             t_title="",
                              t_description="",
                              t_color=0x00ff00
                              ):
-
     await t_ctx.send(embed=discord.Embed(title=t_title, description=t_description, color=t_color))

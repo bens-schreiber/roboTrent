@@ -18,16 +18,13 @@ class TextCommand(commands.Cog):
         :param t_ctx: Context
         :param t_color: Hex color code
         """
-
         try:
-
             # Convert color input to a hex num. If not a possible hex value (larger than 16777215)
-            # fill in 0. Throws ValueError if impossible
-            hex_color = int(t_color, 16) if int(t_color) < 16777216 else 0
+            # fill, make white. Throws ValueError if impossible
+            hex_color = int(t_color, 16) if int(t_color, 16) < 16777216 else 0xFFFFFF
 
             has_role = False
             for role in t_ctx.author.roles[1:]:  # Skip first role in role list w/ slicing, its always @everyone
-
                 # if the color role is present, edit it
                 if role.name == "color":
                     has_role = True
@@ -36,7 +33,6 @@ class TextCommand(commands.Cog):
 
             # If the user does not have a color role already defined, make one
             if not has_role:
-
                 # See implementation in tools
                 await create_and_assign_role(hex_color, t_ctx.author)
 
@@ -52,13 +48,7 @@ class TextCommand(commands.Cog):
         :param t_member: Optional member to grab avatar from. Defaults to None
         """
 
-        if t_member:
-
-            await t_ctx.send(t_member.avatar_url)
-
-        else:
-
-            await t_ctx.send(t_ctx.author.avatar_url)
+        await t_ctx.send(t_member.avatar_url if t_member else t_ctx.author.avatar_url)
 
 
 def setup(bot):

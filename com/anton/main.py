@@ -43,8 +43,21 @@ async def on_message(t_msg: discord.Message):
 
 
 @g_client.event
-async def on_member_join(t_member: discord.Member):
+async def on_voice_state_update(t_member: discord.Member, t_before, t_after: discord.VoiceState):
+    # get channel
+    if t_before.channel is not None:
+        channel: discord.VoiceChannel = t_before.channel
 
+        # If the category is in the temporary channels category
+        if channel.category_id == temp_category():
+
+            # Delete channel if no members
+            if len(channel.members) == 0:
+                await channel.delete()
+
+
+@g_client.event
+async def on_member_join(t_member: discord.Member):
     # Default to white hex code
     await create_and_assign_role(0xFFFFFF, t_member)
 
@@ -57,7 +70,13 @@ async def on_command_error(t_ctx: discord.ext.commands.Context, t_error: discord
 
     # Anything in ignored will return and prevent anything happening.
     if isinstance(t_error, commands.CommandNotFound):
-        await send_error_embed(t_description="Command not found")
+        await send_error_embed(t_ctx, t_description="Command not found")
+
+    if isinstance(t_error, commands.MissingRequiredArgument):
+        await send_error_embed(t_ctx, t_description="Missing required arguments.")
+
+    if isinstance(t_error, commands.BadArgument):
+        await send_error_embed(t_ctx, t_description="Bad arguments.")
 
     else:
         # All other Errors not returned come here. And we can just print the default TraceBack.
