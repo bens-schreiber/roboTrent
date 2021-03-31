@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 from com.anton.tools.tools import *
 
@@ -18,7 +17,7 @@ class VoiceCommand(commands.Cog):
     @commands.command(aliases=["mkc", "channel"])
     async def make_temporary_channel(self,
                                      t_ctx: discord.ext.commands.Context,
-                                     t_name="temp-channel",
+                                     t_name: str = "temp-channel",
                                      t_limit=0,
                                      ):
         guild: discord.Guild = t_ctx.guild
@@ -31,6 +30,7 @@ class VoiceCommand(commands.Cog):
                                              user_limit=abs(t_limit) if abs(t_limit) < 100 else 99,
                                              )
             await send_success_embed(t_ctx, t_title=f"Created channel: {t_name}")
+
         else:
             await send_error_embed(t_ctx, t_description="Maximum channels reached")
 
@@ -42,8 +42,12 @@ class VoiceCommand(commands.Cog):
             if channel.category_id == temp_category():
                 await channel.edit(user_limit=abs(t_limit) if abs(t_limit) < 100 else 99)
                 await send_success_embed(t_ctx, t_description=f"Increased {channel} limit to {t_limit}")
+
             else:
                 await send_error_embed(t_ctx, t_description="Can't edit this channel")
+
+        else:
+            await send_error_embed(t_ctx, t_description="Must be in a voice channel")
 
     @commands.command(name="name")
     async def edit_temp_channel_name(self, t_ctx: discord.ext.commands.Context, t_name):
@@ -51,10 +55,14 @@ class VoiceCommand(commands.Cog):
             channel: discord.VoiceChannel = t_ctx.author.voice.channel
 
             if channel.category_id == temp_category():
-                await channel.edit(name=t_name)  # Grab only the first 100
-                await send_success_embed(t_ctx, t_description=f"Changed {channel} name to {t_name}")
+                await send_success_embed(t_ctx, t_description=f"Changed {channel.name} name to {t_name}")
+                await channel.edit(name=t_name)
+
             else:
                 await send_error_embed(t_ctx, t_description="Can't edit this channel")
+
+        else:
+            await send_error_embed(t_ctx, t_description="Must be in a voice channel")
 
 
 def setup(bot):
