@@ -1,9 +1,16 @@
 import discord
+from discord.ext import commands
 
 
 # File for helper functions that can be used throughout the program
 
 async def create_and_assign_role(t_hex: int, t_member: discord.Member):
+    """
+    :param t_hex: integer hex color code
+    :param t_member: member that should be assigned the role
+    :return:
+    """
+
     # Server the user is in
     usr_guild = t_member.guild
 
@@ -17,33 +24,18 @@ async def create_and_assign_role(t_hex: int, t_member: discord.Member):
     await t_member.add_roles(role)
 
 
-class ErrorEmbed:
-    def __init__(self,
-                 t_title="Error",
-                 t_description="You've Done it, an Error!",
-                 t_color=0xff0000
-                 ):
-        self.t_title = t_title
-        self.t_description = t_description
-        self.t_color = t_color
-
-    def embed(self) -> discord.Embed:
-        return discord.Embed(title=self.t_title,
-                             description=self.t_description,
-                             color=self.t_color)
+async def send_error_embed(t_ctx: discord.ext.commands.Context,
+                           t_title="Error",
+                           t_description="An error occurred :(",
+                           t_color=0xff0000
+                           ):
+    await t_ctx.send(embed=discord.Embed(title=t_title, description=t_description, color=t_color))
 
 
-class SuccessEmbed:
-    def __init__(self,
-                 t_title="Successful",
-                 t_description="",
-                 t_color=0x00ff00
-                 ):
-        self.t_title = t_title
-        self.t_description = t_description
-        self.t_color = t_color
+async def send_success_embed(t_ctx: discord.ext.commands.Context,
+                             t_title="Success",
+                             t_description="",
+                             t_color=0x00ff00
+                             ):
 
-    def embed(self) -> discord.Embed:
-        return discord.Embed(title=self.t_title,
-                             description=self.t_description,
-                             color=self.t_color)
+    await t_ctx.send(embed=discord.Embed(title=t_title, description=t_description, color=t_color))

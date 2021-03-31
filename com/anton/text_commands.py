@@ -14,14 +14,21 @@ class TextCommand(commands.Cog):
     # Change the color of a user's designated color role. Color roles are named after their static ID's.
     @commands.command(name="colorme")
     async def color_member_role(self, t_ctx: discord.ext.commands.Context, t_color):
+        """"
+        :param t_ctx: Context
+        :param t_color: Hex color code
+        """
 
         try:
 
-            hex_color = int(t_color, 16)  # Convert color input to a hex num. Could throw ValueError
+            # Convert color input to a hex num. If not a possible hex value (larger than 16777215)
+            # fill in 0. Throws ValueError if impossible
+            hex_color = int(t_color, 16) if int(t_color) < 16777216 else 0
 
-            # Iterate through roles to find color role.
             has_role = False
             for role in t_ctx.author.roles[1:]:  # Skip first role in role list w/ slicing, its always @everyone
+
+                # if the color role is present, edit it
                 if role.name == "color":
                     has_role = True
                     await role.edit(color=discord.Color(hex_color))
@@ -29,16 +36,21 @@ class TextCommand(commands.Cog):
 
             # If the user does not have a color role already defined, make one
             if not has_role:
+
                 # See implementation in tools
                 await create_and_assign_role(hex_color, t_ctx.author)
 
-            await t_ctx.send(embed=SuccessEmbed(t_title=f"Color changed to {t_color}").embed())
+            await send_success_embed(t_ctx, t_title=f"Color changed to {t_color}")
 
         except ValueError:
-            await t_ctx.send(embed=ErrorEmbed(t_description="Must be a hex value.").embed())
+            await send_error_embed(t_ctx, t_description="Must be a hex value")
 
     @commands.command(name="avatar")
     async def send_avatar(self, t_ctx: discord.ext.commands.Context, t_member: discord.Member = None):
+        """
+        :param t_ctx: Context
+        :param t_member: Optional member to grab avatar from. Defaults to None
+        """
 
         if t_member:
 

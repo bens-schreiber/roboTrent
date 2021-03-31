@@ -44,6 +44,8 @@ async def on_message(t_msg: discord.Message):
 
 @g_client.event
 async def on_member_join(t_member: discord.Member):
+
+    # Default to white hex code
     await create_and_assign_role(0xFFFFFF, t_member)
 
 
@@ -55,7 +57,7 @@ async def on_command_error(t_ctx: discord.ext.commands.Context, t_error: discord
 
     # Anything in ignored will return and prevent anything happening.
     if isinstance(t_error, commands.CommandNotFound):
-        await t_ctx.send(embed=ErrorEmbed(t_description="Command not found").embed())
+        await send_error_embed(t_description="Command not found")
 
     else:
         # All other Errors not returned come here. And we can just print the default TraceBack.
