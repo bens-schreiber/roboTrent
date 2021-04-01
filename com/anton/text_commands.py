@@ -20,7 +20,7 @@ class TextCommand(commands.Cog):
         try:
             # Convert color input to a hex num. If not a possible hex value (larger than 16777215)
             # fill, make white. Throws ValueError if impossible
-            hex_color = int(t_color, 16) if int(t_color, 16) <= 0xFFFFF else 0xFFFFFF
+            hex_color = int(t_color, 16) if int(t_color, 16) <= 0xFFFFFF else 0xFFFFFF
 
             has_role = False
             for role in t_ctx.author.roles[1:]:  # Skip first role in role list w/ slicing, its always @everyone
