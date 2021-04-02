@@ -1,3 +1,4 @@
+import re
 import sys
 import traceback
 
@@ -34,9 +35,18 @@ async def on_ready():
 
 @g_client.event
 async def on_message(t_msg: discord.Message):
-    ctx = t_msg.channel
-    if "sus" in t_msg.content:
-        await ctx.send("you said it!")
+    # Make sure the message isn't sent from the bot.
+    if not t_msg.author.bot:
+        # Channel msg was sent in
+        channel: discord.TextChannel = t_msg.channel
+
+        # Try to find a dad joke
+        joke = dad_joke(t_msg.content)
+        if joke:
+            await channel.send(joke)
+
+        if sus_find(t_msg.content):
+            await channel.send("you said sus")
 
     await g_client.process_commands(t_msg)
 
@@ -64,7 +74,7 @@ async def on_member_join(t_member: discord.Member):
 # Handle any errors
 @g_client.event
 async def on_command_error(t_ctx: discord.ext.commands.Context, t_error: discord.ext.commands.CommandError):
-    if hasattr(t_ctx.command, 'on_error'):
+    if hasattr(t_ctx.command, "on_error"):
         return
 
     # Anything in ignored will return and prevent anything happening.
