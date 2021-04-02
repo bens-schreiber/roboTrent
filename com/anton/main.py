@@ -40,6 +40,7 @@ async def on_message(t_msg: discord.Message):
         # Channel msg was sent in
         channel: discord.TextChannel = t_msg.channel
 
+        # TODO: Combine these two search algorithms for better efficiency
         # Try to find a dad joke
         joke = dad_joke(t_msg.content)
         if joke:
@@ -68,7 +69,7 @@ async def on_voice_state_update(t_member: discord.Member, t_before, t_after: dis
 @g_client.event
 async def on_member_join(t_member: discord.Member):
     # Default to white hex code
-    await create_and_assign_role(0xFFFFFF, t_member)
+    await create_and_assign_color_role(0xFFFFFF, t_member)
 
 
 # Handle any errors
@@ -86,6 +87,9 @@ async def on_command_error(t_ctx: discord.ext.commands.Context, t_error: discord
 
     if isinstance(t_error, commands.BadArgument):
         await send_error_embed(t_ctx, t_description="Bad arguments.")
+
+    if isinstance(t_error, commands.CommandOnCooldown):
+        await t_ctx.send("Slow your roll buddy, wait a while.")
 
     else:
         # All other Errors not returned come here. And we can just print the default TraceBack.

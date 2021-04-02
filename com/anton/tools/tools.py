@@ -16,10 +16,12 @@ def temp_category():
 
 # List of strings the dad filter could activate on
 g_dad_filter = ["im", "i'm", "Im", "I'm", "IM", "I'M"]
+g_MIN_WORD_SIZE = 3
 
 
 def dad_joke(t_msg: str) -> str:
     """
+    Scans a message for words in the g_dad_filter.
     :param t_msg: Message to be scanned for a potential dad joke
     :return: None if no dad joke could be found, formatted string if found.
     """
@@ -32,12 +34,15 @@ def dad_joke(t_msg: str) -> str:
         # If a match was found
         if dad_search is not None:
 
-            # Lol! Dad Joke!
-            return f"Hi {t_msg[dad_search.end() + 1:]}, I'm Dad!"
+            if len(t_msg) > (dad_search.end()) + g_MIN_WORD_SIZE:
+
+                # Lol! Dad Joke!
+                return f"Hi {t_msg[dad_search.end() + 1:]}, I'm Noah Jackson!"
 
 
 def sus_find(t_msg: str) -> bool:
     """
+    Scans a message for the word sus.
     :param t_msg: String to be scanned for the keyword "sus"
     :return: Boolean
     """
@@ -45,7 +50,7 @@ def sus_find(t_msg: str) -> bool:
     return "sus" in t_msg.lower()
 
 
-async def create_and_assign_role(t_hex: int, t_member: discord.Member):
+async def create_and_assign_color_role(t_hex: int, t_member: discord.Member):
     """
     :param t_hex: integer hex color code
     :param t_member: member that should be assigned the role
