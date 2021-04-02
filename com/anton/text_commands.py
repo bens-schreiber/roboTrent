@@ -2,6 +2,7 @@ from random import randint
 
 from discord.ext import commands
 from com.anton.tools.tools import *
+from webcolors import name_to_hex
 
 
 ######################
@@ -20,27 +21,34 @@ class TextCommand(commands.Cog):
         :param t_color: Hex color code
         """
         try:
-            # Convert color input to a hex num. If not a possible hex value (larger than 16777215)
-            # fill, make white. Throws ValueError if impossible
-            hex_color = int(t_color, 16) if int(t_color, 16) <= 0xFFFFFF else 0xFFFFFF
-
-            has_role = False
-            for role in t_ctx.author.roles[1:]:  # Skip first role in role list w/ slicing, its always @everyone
-                # if the color role is present, edit it
-                if role.name == "color":
-                    has_role = True
-                    await role.edit(color=discord.Color(hex_color))
-                    break
-
-            # If the user does not have a color role already defined, make one
-            if not has_role:
-                # See implementation in tools
-                await create_and_assign_color_role(hex_color, t_ctx.author)
-
-            await send_success_embed(t_ctx, t_title=f"Color changed to {t_color}")
+            # Attempt to convert the value of inputted color to a hex value from the name_to_hex web colors function.
+            # Throws value error if the value could not be found from the color
+            hex_color = int(name_to_hex(t_color)[1:], 16)  # Start at the first index because web colors appends a #
 
         except ValueError:
-            await send_error_embed(t_ctx, t_description="Must be a hex value")
+            try:
+                # Convert color input to a hex num. If not a possible hex value (larger than 16777215)
+                # fill, make white. Throws ValueError if impossible
+                hex_color = int(t_color, 16) if int(t_color, 16) <= 0xFFFFFF else 0xFFFFFF
+
+            except ValueError:
+                hex_color = discord.Color.random().value  # Give it a random hex value.
+                t_color = "Random Color, could not find matching name."
+
+        has_role = False
+        for role in t_ctx.author.roles[1:]:  # Skip first role in role list w/ slicing, its always @everyone
+            # if the color role is present, edit it
+            if role.name == "color":
+                has_role = True
+                await role.edit(color=discord.Color(hex_color))
+                break
+
+        # If the user does not have a color role already defined, make one
+        if not has_role:
+            # See implementation in tools
+            await create_and_assign_color_role(hex_color, t_ctx.author)
+
+        await send_success_embed(t_ctx, t_description=f"Color changed to {t_color}")
 
     @commands.command(aliases=["avatar", "pfp"])
     async def send_avatar(self, t_ctx: discord.ext.commands.Context, t_member: discord.Member = None):
@@ -74,6 +82,48 @@ class TextCommand(commands.Cog):
                                                         color=hex))
         except ValueError:
             await send_error_embed(t_ctx, t_description="Must be a hex value")
+
+    @commands.command(name="help")
+    async def help_command(self, t_ctx: discord.ext.commands.Context):
+        await send_success_embed(t_ctx, t_title="Commands", t_description="""
+        - help: 
+            displays this message
+            
+        - avatar 
+            params: [optional: @Member] 
+            desc: shows the avatar of yourself, or a member
+            
+        - colorme, color, clr
+          params: [color]
+          desc: gives you a role of that hex color OR color name.
+          
+        - massping, mp 
+            params: [optional: @Member]
+            desc: pings a member 1-5 times on a 2 minute cooldown
+            
+        - embedme, embed
+            params: [optional: title, optional: description, optional: color]
+            desc: embeds a message. Random color if not specified
+        
+        - channel, mkc
+            params: [optional: name, optional: limit]
+            desc: creates a temporary channel that gets deleted when at 0 members.
+        
+        - limit
+            params: [limit]
+            desc: edits the temporary channel you are in
+        
+        - name
+            params: [name]
+            desc: edits the temporary channel you are in
+            
+        Active Listening Commands:
+        - will call you out for saying "sus"
+        - will make a hilarious dad joke when you say "i'm"
+        
+        COLORS:
+        https://cdn.discordapp.com/attachments/826270722854748184/827387186932351016/0i79GSEuYp0ARo75g.png
+        """)
 
 
 def setup(bot):

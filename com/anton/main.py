@@ -1,4 +1,3 @@
-import re
 import sys
 import traceback
 
@@ -6,7 +5,8 @@ from discord.ext import commands
 from com.anton.tools.tools import *
 
 # Change this to YOUR prefix!!
-g_client = commands.Bot(command_prefix=">")
+g_client = commands.Bot(command_prefix=";")
+g_client.remove_command("help")
 
 # Make sure to change this to YOUR bot token!!!
 g_TOKEN = "ODI2MjgwNjQ3NjgxMTE0MTQy.YGKL0Q.qKgFd8SOAPIdaKrqsB_kOECt3Yw"
