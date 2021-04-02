@@ -1,3 +1,5 @@
+from random import randint
+
 from discord.ext import commands
 from com.anton.tools.tools import *
 
@@ -11,7 +13,7 @@ class TextCommand(commands.Cog):
         self.m_bot = m_bot
 
     # Change the color of a user's designated color role. Color roles are named after their static ID's.
-    @commands.command(name="colorme")
+    @commands.command(aliases=["colorme", "color", "clr"])
     async def color_member_role(self, t_ctx: discord.ext.commands.Context, t_color):
         """"
         :param t_ctx: Context
@@ -33,21 +35,45 @@ class TextCommand(commands.Cog):
             # If the user does not have a color role already defined, make one
             if not has_role:
                 # See implementation in tools
-                await create_and_assign_role(hex_color, t_ctx.author)
+                await create_and_assign_color_role(hex_color, t_ctx.author)
 
             await send_success_embed(t_ctx, t_title=f"Color changed to {t_color}")
 
         except ValueError:
             await send_error_embed(t_ctx, t_description="Must be a hex value")
 
-    @commands.command(name="avatar")
+    @commands.command(aliases=["avatar", "pfp"])
     async def send_avatar(self, t_ctx: discord.ext.commands.Context, t_member: discord.Member = None):
         """
         :param t_ctx: Context
-        :param t_member: Optional member to grab avatar from. Defaults to None
+        :param t_member: Optional member to grab avatar from. Defaults to the author.
         """
-
         await t_ctx.send(t_member.avatar_url if t_member else t_ctx.author.avatar_url)
+
+    @commands.command(aliases=["massping", "mp"])
+    @commands.cooldown(1, 120)
+    async def ping_user_random(self, t_ctx: discord.ext.commands.Context, t_member: discord.Member = None):
+        """
+        :param t_ctx: Context
+        :param t_member: Optional member to ping. Defaults to the author.
+        """
+        for ping in range(randint(1, 5)):
+            await t_ctx.send(t_member.mention if t_member else t_ctx.author.mention)
+
+    @commands.command(aliases=["embedme", "embed"])
+    async def embed_user_message(self, t_ctx: discord.ext.commands.Context,
+                                 t_title: str = "Random color!!",
+                                 t_description: str = None,
+                                 t_color: str = None):
+
+        try:
+            # Try to convert to a hex num. If the hex num wasn't specified (NONE), give it a random color.
+            hex_value = int(t_color, 16) if t_color is not None else discord.Color.random().value
+            await t_ctx.send(embed=discord.embeds.Embed(title=t_title,
+                                                        description=t_description,
+                                                        color=hex))
+        except ValueError:
+            await send_error_embed(t_ctx, t_description="Must be a hex value")
 
 
 def setup(bot):
