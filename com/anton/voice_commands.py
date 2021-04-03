@@ -6,7 +6,6 @@ from com.anton.tools.tools import *
 #######################
 from com.anton.tools.tools import temp_category
 
-g_CATEGORY_ID = temp_category()
 g_CATEGORY_LIMIT = 6
 
 
@@ -21,7 +20,7 @@ class VoiceCommand(commands.Cog):
                                      t_limit=0,
                                      ):
         guild: discord.Guild = t_ctx.guild
-        category: discord.CategoryChannel = discord.utils.get(guild.categories, id=g_CATEGORY_ID)
+        category: discord.CategoryChannel = discord.utils.get(guild.categories, id=temp_category(t_ctx.guild))
 
         # Check to see if the temp category channel is at its limit
         if len(category.channels) <= g_CATEGORY_LIMIT:
@@ -39,7 +38,7 @@ class VoiceCommand(commands.Cog):
         if t_ctx.author.voice is not None:
             channel: discord.VoiceChannel = t_ctx.author.voice.channel
 
-            if channel.category_id == temp_category():
+            if channel.category_id == temp_category(t_ctx.guild):
                 await channel.edit(user_limit=abs(t_limit) if abs(t_limit) < 100 else 99)
                 await send_success_embed(t_ctx, t_description=f"Increased {channel} limit to {t_limit}")
 
@@ -54,7 +53,7 @@ class VoiceCommand(commands.Cog):
         if t_ctx.author.voice is not None:
             channel: discord.VoiceChannel = t_ctx.author.voice.channel
 
-            if channel.category_id == temp_category():
+            if channel.category_id == temp_category(t_ctx.guild):
                 await send_success_embed(t_ctx, t_description=f"Changed {channel.name} name to {t_name}")
                 await channel.edit(name=t_name)
 

@@ -23,7 +23,7 @@ class TextCommand(commands.Cog):
         try:
             # Attempt to convert the value of inputted color to a hex value from the name_to_hex web colors function.
             # Throws value error if the value could not be found from the color
-            hex_color = int(name_to_hex(t_color)[1:], 16)  # Start at the first index because web colors appends a #
+            hex_color = int(name_to_hex(t_color)[1:], 16)  # Start at the first index because web color adds hash
 
         except ValueError:
             try:
@@ -49,6 +49,12 @@ class TextCommand(commands.Cog):
             await create_and_assign_color_role(hex_color, t_ctx.author)
 
         await send_success_embed(t_ctx, t_description=f"Color changed to {t_color}")
+
+    @commands.command(name="colors")
+    async def send_available_colors(self, t_ctx: discord.ext.commands.Context):
+        await t_ctx.send("""
+                         https://cdn.discordapp.com/attachments/826270722854748184/827387186932351016/0i79GSEuYp0ARo75g.png
+                         """)
 
     @commands.command(aliases=["avatar", "pfp"])
     async def send_avatar(self, t_ctx: discord.ext.commands.Context, t_member: discord.Member = None):
@@ -77,11 +83,18 @@ class TextCommand(commands.Cog):
         try:
             # Try to convert to a hex num. If the hex num wasn't specified (NONE), give it a random color.
             hex_value = int(t_color, 16) if t_color is not None else discord.Color.random().value
+            await t_ctx.message.delete()
             await t_ctx.send(embed=discord.embeds.Embed(title=t_title,
                                                         description=t_description,
-                                                        color=hex))
+                                                        color=hex_value))
         except ValueError:
             await send_error_embed(t_ctx, t_description="Must be a hex value")
+
+    @commands.command(aliases=["asteve", "aryansteve"])
+    async def send_aryan_steve(self, t_ctx: discord.ext.commands.Context):
+        await t_ctx.send("https://cdn.discordapp.com/attachments/826271209930096671/827603602914279494"
+                         "/6615pRbr369cIbiCN32_EPUtwJi7HW_2WscrZoxwYGJMsP0xIuhh5a8qJ3r34UFNnL3pKuPKu_pOEM07-jSZs500"
+                         ".png")
 
     @commands.command(name="help")
     async def help_command(self, t_ctx: discord.ext.commands.Context):
@@ -116,6 +129,9 @@ class TextCommand(commands.Cog):
         - name
             params: [name]
             desc: edits the temporary channel you are in
+        
+        - aryansteve, asteve
+            desc: displays aryan steve
             
         Active Listening Commands:
         - will call you out for saying "sus"

@@ -5,7 +5,7 @@ from discord.ext import commands
 from com.anton.tools.tools import *
 
 # Change this to YOUR prefix!!
-g_client = commands.Bot(command_prefix=";")
+g_client = commands.Bot(command_prefix=["noah jackson, ", ">"])
 g_client.remove_command("help")
 
 # Make sure to change this to YOUR bot token!!!
@@ -59,7 +59,7 @@ async def on_voice_state_update(t_member: discord.Member, t_before, t_after: dis
         channel: discord.VoiceChannel = t_before.channel
 
         # If the category is in the temporary channels category
-        if channel.category_id == temp_category():
+        if channel.category_id == temp_category(t_member.guild):
 
             # Delete channel if no members
             if len(channel.members) == 0:

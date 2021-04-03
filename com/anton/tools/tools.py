@@ -7,10 +7,13 @@ from discord.ext import commands
 # File for helper functions that can be used throughout the program
 
 # The category that temp channels are hardcoded into. Change it here.
-def temp_category():
+def temp_category(t_guild: discord.Guild):
     """
     :return: ID of the temporary channels category.
     """
+    if t_guild.id == 720879057469702216:
+        return 827405509979013120
+
     return 826653009005772800
 
 
