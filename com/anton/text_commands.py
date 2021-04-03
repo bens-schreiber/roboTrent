@@ -23,7 +23,7 @@ class TextCommand(commands.Cog):
         try:
             # Attempt to convert the value of inputted color to a hex value from the name_to_hex web colors function.
             # Throws value error if the value could not be found from the color
-            hex_color = int(name_to_hex(t_color)[1:], 16) + 1  # Start at the first index because web color adds hash
+            hex_color = int(name_to_hex(t_color)[1:], 16)  # Start at the first index because web color adds hash
 
         except ValueError:
             try:
