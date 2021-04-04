@@ -18,8 +18,8 @@ def temp_category(t_guild: discord.Guild):
 
 
 # List of strings the dad filter could activate on
-g_dad_filter = ["im", "i'm", "Im", "I'm", "IM", "I'M"]
 g_MIN_WORD_SIZE = 3
+g_DAD_REGEX = re.compile(r"\b(i'm|im|i am)\b", flags=re.IGNORECASE)
 
 
 def dad_joke(t_msg: str) -> str:
@@ -28,19 +28,17 @@ def dad_joke(t_msg: str) -> str:
     :param t_msg: Message to be scanned for a potential dad joke
     :return: None if no dad joke could be found, formatted string if found.
     """
-    # Search every word of the message to see if it contains I'm
-    for word in g_dad_filter:
 
-        # Regex that returns a Match object if "I'm" is found
-        dad_search: re.Match = re.search(r'\b' + re.escape(word) + r'\b', t_msg)
+    # Regex that returns a Match object if "(?i) i'm or (?i) im" is found
+    dad_search: re.Match = g_DAD_REGEX.search(t_msg)
 
-        # If a match was found
-        if dad_search is not None:
+    # If a match was found
+    if dad_search is not None:
 
-            if len(t_msg) > (dad_search.end()) + g_MIN_WORD_SIZE:
+        if len(t_msg) > (dad_search.end()) + g_MIN_WORD_SIZE:
 
-                # Lol! Dad Joke!
-                return f"Hi {t_msg[dad_search.end() + 1:]}, I'm Noah Jackson!"
+            # Lol! Dad Joke!
+            return f"Hi {t_msg[dad_search.end() + 1:]}, I'm Noah Jackson!"
 
 
 def sus_find(t_msg: str) -> bool:
