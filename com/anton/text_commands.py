@@ -21,9 +21,10 @@ class TextCommand(commands.Cog):
         :param t_color: Hex color code
         """
         try:
+
             # Attempt to convert the value of inputted color to a hex value from the name_to_hex web colors function.
             # Throws value error if the value could not be found from the color
-            hex_color = int(name_to_hex(t_color)[1:], 16)  # Start at the first index because web color adds hash
+            hex_color = int(name_to_hex(t_color)[1:], 16) if t_color != "black" else 0x000001  # fuck you Cade
 
         except ValueError:
             try:
@@ -95,6 +96,10 @@ class TextCommand(commands.Cog):
         await t_ctx.send("https://cdn.discordapp.com/attachments/826271209930096671/827603602914279494"
                          "/6615pRbr369cIbiCN32_EPUtwJi7HW_2WscrZoxwYGJMsP0xIuhh5a8qJ3r34UFNnL3pKuPKu_pOEM07-jSZs500"
                          ".png")
+
+    @commands.command(name="test")
+    async def test_cmd(self, t_ctx):
+        await t_ctx.send("test")
 
     @commands.command(name="help")
     async def help_command(self, t_ctx: discord.ext.commands.Context):
