@@ -1,6 +1,8 @@
 from random import randint
 
 from discord.ext import commands
+from discord.ext.commands import BucketType
+
 from com.anton.tools.tools import *
 from webcolors import name_to_hex
 
@@ -66,7 +68,7 @@ class TextCommand(commands.Cog):
         await t_ctx.send(t_member.avatar_url if t_member else t_ctx.author.avatar_url)
 
     @commands.command(aliases=["massping", "mp"])
-    @commands.cooldown(1, 120)
+    @commands.cooldown(1, 120, BucketType.user)
     async def ping_user_random(self, t_ctx: discord.ext.commands.Context, t_member: discord.Member = None):
         """
         :param t_ctx: Context

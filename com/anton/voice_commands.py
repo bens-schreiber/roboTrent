@@ -6,7 +6,7 @@ from com.anton.tools.tools import *
 #######################
 from com.anton.tools.tools import temp_category
 
-g_CATEGORY_LIMIT = 6
+g_CATEGORY_LIMIT = 10
 
 
 class VoiceCommand(commands.Cog):

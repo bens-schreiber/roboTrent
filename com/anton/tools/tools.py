@@ -10,11 +10,15 @@ from discord.ext import commands
 def temp_category(t_guild: discord.Guild):
     """
     :return: ID of the temporary channels category.
+    720879057469702216
     """
     if t_guild.id == 720879057469702216:
-        return 827405509979013120
+        return 840080355361161227
 
-    return 826653009005772800
+    elif t_guild.id == 701160994747056139:
+        return 840073125537382460
+
+    return -1
 
 
 # List of strings the dad filter could activate on

@@ -9,7 +9,7 @@ g_client = commands.Bot(command_prefix=["noah jackson, ", ">"])
 g_client.remove_command("help")
 
 # Make sure to change this to YOUR bot token!!!
-g_TOKEN = ""
+g_TOKEN = "ODQwMDcwMzkxMzAwMjI3MDgy.YJS2hQ.iOR75zcn1PAc5KUS6hrvP1SvYfo"
 
 # Here we are going to load our cogs
 initial_extensions = [
@@ -77,10 +77,6 @@ async def on_member_join(t_member: discord.Member):
 async def on_command_error(t_ctx: discord.ext.commands.Context, t_error: discord.ext.commands.CommandError):
     if hasattr(t_ctx.command, "on_error"):
         return
-
-    # Anything in ignored will return and prevent anything happening.
-    if isinstance(t_error, commands.CommandNotFound):
-        await send_error_embed(t_ctx, t_description="Command not found")
 
     if isinstance(t_error, commands.MissingRequiredArgument):
         await send_error_embed(t_ctx, t_description="Missing required arguments.")
