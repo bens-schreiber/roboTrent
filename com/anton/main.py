@@ -5,16 +5,20 @@ from discord.ext import commands
 from com.anton.tools.tools import *
 
 # Change this to YOUR prefix!!
-g_client = commands.Bot(command_prefix=["noah jackson, ", ">"])
+g_client = commands.Bot(command_prefix=["RoboTrent ", "robotrent ", "Robotrent "])
 g_client.remove_command("help")
 
-# Make sure to change this to YOUR bot token!!!
-g_TOKEN = "ODQwMDcwMzkxMzAwMjI3MDgy.YJS2hQ.iOR75zcn1PAc5KUS6hrvP1SvYfo"
+g_GENERAL_CHANNEL = 899684495337328655
+g_BOT_CHANNEL = 900413299894673438
 
-# Here we are going to load our cogs
+g_DAD_JOKE_ALLOWED = [g_GENERAL_CHANNEL, g_BOT_CHANNEL]
+
+# bot token
+g_TOKEN = "OTAwMjQxNTY3ODY3MTA1MzAw.YW-dSw.jwIEAW2x2wqUGDDfp-3Bn5E8ktw"
+
+# Here we are going to load our cogs ( other .py scripts )
 initial_extensions = [
-    "text_commands",
-    "voice_commands"
+    "text_commands"
 ]
 
 if __name__ == '__main__':
@@ -26,8 +30,6 @@ if __name__ == '__main__':
 # EVENTS ONLY IN MAIN #
 #######################
 
-# Don't fuck with the on_ready method.
-# It is apparently recommended not to do shit in it.
 @g_client.event
 async def on_ready():
     print("online")
@@ -40,36 +42,15 @@ async def on_message(t_msg: discord.Message):
         # Channel msg was sent in
         channel: discord.TextChannel = t_msg.channel
 
-        # TODO: Combine these two search algorithms for better efficiency
         # Try to find a dad joke
-        joke = dad_joke(t_msg.content)
-        if joke:
+        joke = await dad_joke(t_msg.content)
+        if channel.id in g_DAD_JOKE_ALLOWED and joke:
             await channel.send(joke)
 
-        if sus_find(t_msg.content):
-            await channel.send("you said sus")
+        elif await gaming_find(t_msg.content):
+            await channel.send("gaming")
 
     await g_client.process_commands(t_msg)
-
-
-@g_client.event
-async def on_voice_state_update(t_member: discord.Member, t_before, t_after: discord.VoiceState):
-    # get channel
-    if t_before.channel is not None:
-        channel: discord.VoiceChannel = t_before.channel
-
-        # If the category is in the temporary channels category
-        if channel.category_id == temp_category(t_member.guild):
-
-            # Delete channel if no members
-            if len(channel.members) == 0:
-                await channel.delete()
-
-
-@g_client.event
-async def on_member_join(t_member: discord.Member):
-    # Default to white hex code
-    await create_and_assign_color_role(0xFFFFFF, t_member)
 
 
 # Handle any errors

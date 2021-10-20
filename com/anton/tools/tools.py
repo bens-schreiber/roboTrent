@@ -3,30 +3,13 @@ import re
 import discord
 from discord.ext import commands
 
-
-# File for helper functions that can be used throughout the program
-
-# The category that temp channels are hardcoded into. Change it here.
-def temp_category(t_guild: discord.Guild):
-    """
-    :return: ID of the temporary channels category.
-    720879057469702216
-    """
-    if t_guild.id == 720879057469702216:
-        return 840080355361161227
-
-    elif t_guild.id == 701160994747056139:
-        return 840073125537382460
-
-    return -1
-
-
 # List of strings the dad filter could activate on
 g_MIN_WORD_SIZE = 3
 g_DAD_REGEX = re.compile(r"\b(i'm|im|i am)\b", flags=re.IGNORECASE)
+g_GAMING_REGEX = re.compile(r"\b(gaming)\b", flags=re.IGNORECASE)
 
 
-def dad_joke(t_msg: str) -> str:
+async def dad_joke(t_msg: str) -> str:
     """
     Scans a message for words in the g_dad_filter.
     :param t_msg: Message to be scanned for a potential dad joke
@@ -40,39 +23,18 @@ def dad_joke(t_msg: str) -> str:
     if dad_search is not None:
 
         if len(t_msg) > (dad_search.end()) + g_MIN_WORD_SIZE:
-
             # Lol! Dad Joke!
-            return f"Hi {t_msg[dad_search.end() + 1:]}, I'm Noah Jackson!"
+            return f"Hi {t_msg[dad_search.end() + 1:]}, I'm Trent!"
 
 
-def sus_find(t_msg: str) -> bool:
+async def gaming_find(t_msg: str) -> bool:
     """
-    Scans a message for the word sus.
-    :param t_msg: String to be scanned for the keyword "sus"
+    Scans a message for the word gaming.
+    :param t_msg: String to be scanned for the keyword "gaming"
     :return: Boolean
     """
 
-    return "sus" in t_msg.lower()
-
-
-async def create_and_assign_color_role(t_hex: int, t_member: discord.Member):
-    """
-    :param t_hex: integer hex color code
-    :param t_member: member that should be assigned the role
-    :return:
-    """
-
-    # Server the user is in
-    usr_guild = t_member.guild
-
-    # Create a new role with a color
-    role = await usr_guild.create_role(
-        name="color",
-        color=discord.Color(t_hex)
-    )
-
-    # Add that role to the user
-    await t_member.add_roles(role)
+    return g_GAMING_REGEX.search(t_msg) is not None
 
 
 async def send_error_embed(t_ctx: discord.ext.commands.Context,
